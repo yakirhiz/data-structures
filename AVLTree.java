@@ -1,3 +1,7 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+
 /**
  *
  * AVLTree
@@ -547,7 +551,7 @@ public class AVLTree<K extends Comparable<K>, V> {
     }
 
     /**
-     * Inorder traversal (no recursion or stack)
+     * Inorder traversal (Morris Traversal - no recursion or stack)
      *
      * Time Complexity: O(n)
      */
@@ -577,6 +581,50 @@ public class AVLTree<K extends Comparable<K>, V> {
                     curr = curr.right;
                 }
             }
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * BFS traversal (w/ queue)
+     *
+     * Time Complexity: O(n)
+     */
+    public String bfs() {
+        StringBuilder sb = new StringBuilder();
+
+        Queue<AVLNode> q = new LinkedList<>();
+        q.add(this.root);
+
+        while (!q.isEmpty()) {
+            AVLNode curr = q.poll();
+            sb.append(curr.value); // visit(curr)
+            if (curr.left != null) q.add(curr.left);
+            if (curr.right != null) q.add(curr.right);
+            sb.append(!q.isEmpty() ? " " : "");
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * DFS traversal (w/ stack)
+     *
+     * Time Complexity: O(n)
+     */
+    public String dfs() {
+        StringBuilder sb = new StringBuilder();
+
+        Stack<AVLNode> s = new Stack<>();
+        s.push(this.root);
+
+        while (!s.isEmpty()) {
+            AVLNode curr = s.pop();
+            sb.append(curr.value); // visit(curr)
+            if (curr.right != null) s.push(curr.right);
+            if (curr.left != null) s.push(curr.left);
+            sb.append(!s.isEmpty() ? " " : "");
         }
 
         return sb.toString();
