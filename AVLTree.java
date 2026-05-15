@@ -1,4 +1,8 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 import java.util.function.Consumer;
 
 /**
@@ -554,15 +558,15 @@ public class AVLTree<K extends Comparable<K>, V> {
      *
      * Time Complexity: O(n)
      */
-    public String inorder() {
-        StringBuilder sb = new StringBuilder();
+    public List<K> inorder() {
+        List<K> result = new ArrayList<>();
 
         // The algorithm (the tree structure is preserved)
         AVLNode curr = this.root;
 
         while (curr != null) {
             if (curr.left == null) {
-                sb.append(curr.key).append(curr.right != null ? " " : ""); // visit(curr)
+                result.add(curr.key); // visit(curr)
                 curr = curr.right;
             } else {
                 AVLNode pre = curr.left;
@@ -576,13 +580,13 @@ public class AVLTree<K extends Comparable<K>, V> {
                     curr = curr.left;
                 } else {
                     pre.right = null;
-                    sb.append(curr.key).append(curr.right != null ? " " : ""); // visit(curr)
+                    result.add(curr.key); // visit(curr)
                     curr = curr.right;
                 }
             }
         }
 
-        return sb.toString();
+        return result;
     }
 
     /**
@@ -605,28 +609,44 @@ public class AVLTree<K extends Comparable<K>, V> {
     }
 
     /**
+     * BFS traversal (w/ queue) that returns a list of keys
+     *
+     * Time Complexity: O(n)
+     */
+    public List<K> bfs() {
+        List<K> result = new ArrayList<>();
+        bfs(result::add);
+        return result;
+    }
+
+    /**
      * DFS traversal (w/ stack)
      *
      * Time Complexity: O(n)
      */
-    public String dfs() {
-        if (this.root == null)
-            return "";
-
-        StringBuilder sb = new StringBuilder();
+    public void dfs(Consumer<K> consumer) {
+        if (this.root == null) return;
 
         Stack<AVLNode> s = new Stack<>();
         s.push(this.root);
 
         while (!s.isEmpty()) {
             AVLNode curr = s.pop();
-            sb.append(curr.value); // visit(curr)
+            consumer.accept(curr.key); // visit(curr)
             if (curr.right != null) s.push(curr.right);
             if (curr.left != null) s.push(curr.left);
-            sb.append(!s.isEmpty() ? " " : "");
         }
+    }
 
-        return sb.toString();
+    /**
+     * DFS traversal (w/ stack) that returns a list of keys
+     *
+     * Time Complexity: O(n)
+     */
+    public List<K> dfs() {
+        List<K> result = new ArrayList<>();
+        dfs(result::add);
+        return result;
     }
 
     /**
