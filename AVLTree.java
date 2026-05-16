@@ -699,8 +699,38 @@ public class AVLTree<K extends Comparable<K>, V> {
         return buffer;
     }
 
+    /**
+     * Prints the tree.
+     *
+     * Time Complexity: O(n)
+     */
+    private StringBuilder toTreeString(AVLNode node, StringBuilder buffer, String prefix, String childrenPrefix) {
+        if (node == null)
+            return buffer;
+
+        buffer.append(prefix).append(node.key).append("\n");
+
+        if (node.right != null) {
+            if (node.left != null) {
+                toTreeString(node.right, buffer, childrenPrefix + "├── ", childrenPrefix + "│   ");
+            } else {
+                toTreeString(node.right, buffer, childrenPrefix + "└── ", childrenPrefix + "    ");
+            }
+        }
+
+        if (node.left != null) {
+            toTreeString(node.left, buffer, childrenPrefix + "└── ", childrenPrefix + "    ");
+        }
+
+        return buffer;
+    }
+
     public String toString() {
         return this.toString(this.root, new StringBuilder(), new StringBuilder(), true).toString();
+    }
+
+    public String toTreeString() {
+        return this.toTreeString(this.root, new StringBuilder(), "", "").toString();
     }
 
     /**
